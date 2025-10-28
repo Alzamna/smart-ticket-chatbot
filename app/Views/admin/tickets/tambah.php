@@ -18,7 +18,12 @@
 
   <div>
     <label class="block text-sm">Jenis Layanan</label>
-    <input type="text" name="jenis_layanan" class="w-full border rounded px-3 py-2" required>
+    <select name="jenis_layanan" class="w-full border rounded px-3 py-2">
+      <option value="">-- Pilih Layanan --</option>
+      <?php foreach((new \App\Models\ServiceModel())->findAll() as $s): ?>
+        <option value="<?= esc($s['nama_layanan']) ?>"><?= esc($s['nama_layanan']) ?> (Rp <?= number_format($s['biaya'],0,',','.') ?>)</option>
+      <?php endforeach; ?>
+    </select>
   </div>
 
   <div>

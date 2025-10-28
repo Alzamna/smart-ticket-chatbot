@@ -102,6 +102,63 @@ class Admin extends BaseController
         return redirect()->to('/admin/tickets')->with('success', 'Tiket berhasil dihapus!');
     }
 
+    //Service Management
+    public function services()
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+        $data = [
+            'title' => 'Data Layanan',
+            'services' => $serviceModel->orderBy('id_service', 'DESC')->findAll()
+        ];
+        return view('admin/services/index', $data);
+    }
+
+    public function add_service()
+    {
+        $data['title'] = 'Tambah Layanan Baru';
+        return view('admin/services/tambah', $data);
+    }
+
+    public function save_service()
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+        $serviceModel->insert([
+            'nama_layanan' => $this->request->getPost('nama_layanan'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'biaya' => $this->request->getPost('biaya')
+        ]);
+        return redirect()->to('/admin/services')->with('success', 'Layanan berhasil ditambahkan!');
+    }
+
+    public function edit_service($id)
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+        $data = [
+            'title' => 'Edit Layanan',
+            'service' => $serviceModel->find($id)
+        ];
+        return view('admin/services/edit', $data);
+    }
+
+    public function update_service($id)
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+        $serviceModel->update($id, [
+            'nama_layanan' => $this->request->getPost('nama_layanan'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'biaya' => $this->request->getPost('biaya')
+        ]);
+        return redirect()->to('/admin/services')->with('success', 'Layanan berhasil diperbarui!');
+    }
+
+    public function delete_service($id)
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+        $serviceModel->delete($id);
+        return redirect()->to('/admin/services')->with('success', 'Layanan berhasil dihapus!');
+    }
+
+
 
     //Complaint Management
     public function complaints()

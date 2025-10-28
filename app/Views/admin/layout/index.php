@@ -17,6 +17,7 @@
     <nav class="mt-4 space-y-1">
       <a href="/admin/dashboard" class="block px-4 py-2 hover:bg-slate-700 <?= url_is('admin/dashboard')?'bg-slate-700':'' ?>">📊 Dashboard</a>
       <a href="/admin/tickets" class="block px-4 py-2 hover:bg-slate-700 <?= url_is('admin/tickets*')?'bg-slate-700':'' ?>">🎫 Tiket</a>
+      <a href="/admin/services" class="block px-4 py-2 hover:bg-slate-700 <?= url_is('admin/services*')?'bg-slate-700':'' ?>">⚙️ Layanan</a>
       <a href="/admin/complaints" class="block px-4 py-2 hover:bg-slate-700 <?= url_is('admin/complaints*')?'bg-slate-700':'' ?>">🗣️ Keluhan</a>
       <a href="/b0/logout" class="block px-4 py-2 mt-4 border-t border-slate-700 hover:bg-red-700 text-red-200">🚪 Logout</a>
     </nav>

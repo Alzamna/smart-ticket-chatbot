@@ -33,7 +33,8 @@ $routes->get('/b0/logout', 'Auth::logout');
 // Area admin (pakai filter auth kalau sudah aktif)
 $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('dashboard', 'Admin::dashboard');
-    
+
+    // Tiket
     $routes->get('tickets', 'Admin::tickets');
     $routes->get('tickets/add', 'Admin::add_ticket');
     $routes->post('tickets/save', 'Admin::save_ticket');
@@ -41,6 +42,15 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('tickets/update/(:num)', 'Admin::update_ticket/$1');
     $routes->get('tickets/delete/(:num)', 'Admin::delete_ticket/$1');
 
+    // Layanan
+    $routes->get('services', 'Admin::services');
+    $routes->get('services/add', 'Admin::add_service');
+    $routes->post('services/save', 'Admin::save_service');
+    $routes->get('services/edit/(:num)', 'Admin::edit_service/$1');
+    $routes->post('services/update/(:num)', 'Admin::update_service/$1');
+    $routes->get('services/delete/(:num)', 'Admin::delete_service/$1');
+
+    // Pengaduan
     $routes->get('complaints', 'Admin::complaints');
     $routes->post('complaints/update/(:num)', 'Admin::update_complaint/$1');
     $routes->get('complaints/delete/(:num)', 'Admin::delete_complaint/$1');
