@@ -68,7 +68,8 @@ class Admin extends BaseController
             'jenis_layanan' => $this->request->getPost('jenis_layanan'),
             'nomor_tiket' => $ticketNo,
             'status' => 'Menunggu',
-            'catatan' => $this->request->getPost('catatan')
+            'catatan' => $this->request->getPost('catatan'),
+            'id_vehicle' => $this->request->getPost('id_vehicle')
         ];
         $this->ticketModel->insert($data);
         return redirect()->to('/admin/tickets')->with('success', 'Tiket berhasil ditambahkan!');
@@ -158,31 +159,115 @@ class Admin extends BaseController
         return redirect()->to('/admin/services')->with('success', 'Layanan berhasil dihapus!');
     }
 
-
-
-    //Complaint Management
-    public function complaints()
+    // Kendaraan
+    public function vehicles()
     {
+        $vehicleModel = new \App\Models\VehicleModel();
+        $userModel = new \App\Models\UserModel();
         $data = [
-            'title' => 'Keluhan Masyarakat',
-            'complaints' => $this->complaintModel
-                ->orderBy('created_at', 'DESC')
+            'title' => 'Data Kendaraan',
+            'vehicles' => $vehicleModel
+                ->select('vehicles.*, users.nama')
+                ->join('users', 'users.id_user = vehicles.id_user', 'left')
+                ->orderBy('id_vehicle', 'DESC')
                 ->findAll()
         ];
+        return view('admin/vehicles/index', $data);
+    }
 
-        return view('admin/complaints', $data);
+    public function add_vehicle()
+    {
+        $userModel = new \App\Models\UserModel();
+        $data = [
+            'title' => 'Tambah Kendaraan',
+            'users' => $userModel->findAll()
+        ];
+        return view('admin/vehicles/tambah', $data);
+    }
+
+    public function save_vehicle()
+    {
+        $vehicleModel = new \App\Models\VehicleModel();
+        $vehicleModel->insert([
+            'id_user' => $this->request->getPost('id_user'),
+            'plat_nomor' => strtoupper($this->request->getPost('plat_nomor')),
+            'jenis_kendaraan' => $this->request->getPost('jenis_kendaraan'),
+            'merk' => $this->request->getPost('merk'),
+            'tahun_pembuatan' => $this->request->getPost('tahun_pembuatan'),
+            'warna' => $this->request->getPost('warna'),
+        ]);
+        return redirect()->to('/admin/vehicles')->with('success', 'Kendaraan berhasil ditambahkan!');
+    }
+
+    public function edit_vehicle($id)
+    {
+        $vehicleModel = new \App\Models\VehicleModel();
+        $userModel = new \App\Models\UserModel();
+        $data = [
+            'title' => 'Edit Kendaraan',
+            'vehicle' => $vehicleModel->find($id),
+            'users' => $userModel->findAll()
+        ];
+        return view('admin/vehicles/edit', $data);
+    }
+
+    public function update_vehicle($id)
+    {
+        $vehicleModel = new \App\Models\VehicleModel();
+        $vehicleModel->update($id, [
+            'id_user' => $this->request->getPost('id_user'),
+            'plat_nomor' => strtoupper($this->request->getPost('plat_nomor')),
+            'jenis_kendaraan' => $this->request->getPost('jenis_kendaraan'),
+            'merk' => $this->request->getPost('merk'),
+            'tahun_pembuatan' => $this->request->getPost('tahun_pembuatan'),
+            'warna' => $this->request->getPost('warna'),
+        ]);
+        return redirect()->to('/admin/vehicles')->with('success', 'Kendaraan berhasil diperbarui!');
+    }
+
+    public function delete_vehicle($id)
+    {
+        $vehicleModel = new \App\Models\VehicleModel();
+        $vehicleModel->delete($id);
+        return redirect()->to('/admin/vehicles')->with('success', 'Kendaraan berhasil dihapus!');
+    }
+
+    // Complaint
+
+    public function complaints()
+    {
+        $complaintModel = new \App\Models\ComplaintModel();
+        $data = [
+            'title' => 'Data Keluhan',
+            'complaints' => $complaintModel->orderBy('created_at', 'DESC')->findAll()
+        ];
+        return view('admin/complaints/index', $data);
+    }
+
+    public function edit_complaint($id)
+    {
+        $complaintModel = new \App\Models\ComplaintModel();
+        $data = [
+            'title' => 'Tindak Lanjut Keluhan',
+            'complaint' => $complaintModel->find($id)
+        ];
+        return view('admin/complaints/edit', $data);
     }
 
     public function update_complaint($id)
     {
-        $status = $this->request->getPost('status');
-        $this->complaintModel->update($id, ['status' => $status]);
-        return redirect()->back()->with('success', 'Status keluhan diperbarui');
+        $complaintModel = new \App\Models\ComplaintModel();
+        $complaintModel->update($id, [
+            'status' => $this->request->getPost('status')
+        ]);
+        return redirect()->to('/admin/complaints')->with('success', 'Status keluhan berhasil diperbarui!');
     }
 
     public function delete_complaint($id)
     {
-        $this->complaintModel->delete($id);
-        return redirect()->back()->with('success', 'Data keluhan dihapus');
+        $complaintModel = new \App\Models\ComplaintModel();
+        $complaintModel->delete($id);
+        return redirect()->to('/admin/complaints')->with('success', 'Keluhan berhasil dihapus!');
     }
+
 }

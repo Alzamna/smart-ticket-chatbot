@@ -27,6 +27,17 @@
   </div>
 
   <div>
+    <label class="block text-sm">Pilih Kendaraan</label>
+    <select name="id_vehicle" class="w-full border rounded px-3 py-2" required>
+      <option value="">-- Pilih Kendaraan --</option>
+      <?php foreach((new \App\Models\VehicleModel())->findAll() as $v): ?>
+        <option value="<?= $v['id_vehicle'] ?>"><?= esc($v['plat_nomor']) ?> (<?= esc($v['jenis_kendaraan']) ?>)</option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+
+
+  <div>
     <label class="block text-sm">Catatan</label>
     <textarea name="catatan" class="w-full border rounded px-3 py-2"></textarea>
   </div>

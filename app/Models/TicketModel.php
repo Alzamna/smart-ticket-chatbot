@@ -12,7 +12,8 @@ class TicketModel extends Model
         'nomor_tiket',
         'status',
         'tanggal_pengajuan',
-        'catatan'
+        'catatan',
+        'id_vehicle'
     ];
 
     protected $useTimestamps = false;

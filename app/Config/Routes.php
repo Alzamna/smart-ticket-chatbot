@@ -50,6 +50,14 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('services/update/(:num)', 'Admin::update_service/$1');
     $routes->get('services/delete/(:num)', 'Admin::delete_service/$1');
 
+    // Kendaraan
+    $routes->get('vehicles', 'Admin::vehicles');
+    $routes->get('vehicles/add', 'Admin::add_vehicle');
+    $routes->post('vehicles/save', 'Admin::save_vehicle');
+    $routes->get('vehicles/edit/(:num)', 'Admin::edit_vehicle/$1');
+    $routes->post('vehicles/update/(:num)', 'Admin::update_vehicle/$1');
+    $routes->get('vehicles/delete/(:num)', 'Admin::delete_vehicle/$1');
+
     // Pengaduan
     $routes->get('complaints', 'Admin::complaints');
     $routes->post('complaints/update/(:num)', 'Admin::update_complaint/$1');
