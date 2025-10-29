@@ -21,7 +21,7 @@
     <?php $no=1; foreach($tickets as $t): ?>
     <tr>
       <td class="border p-2 text-center"><?= $no++ ?></td>
-      <td class="border p-2"><?= esc($t['nama']) ?></td>
+      <td class="border p-2"><?= esc($t['owner_name']) ?></td>
       <td class="border p-2"><?= esc($t['jenis_layanan']) ?></td>
       <td class="border p-2"><?= esc($t['nomor_tiket']) ?></td>
       <td class="border p-2"><?= esc($t['status']) ?></td>

@@ -43,7 +43,7 @@ class Admin extends BaseController
         $data = [
             'title' => 'Data Tiket',
             'tickets' => $this->ticketModel
-                ->select('tickets.*, users.nama')
+                ->select('tickets.*, owner_name')
                 ->join('users', 'users.id_user = tickets.id_user', 'left')
                 ->orderBy('tickets.tanggal_pengajuan', 'DESC')
                 ->findAll()

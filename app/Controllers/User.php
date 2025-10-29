@@ -30,6 +30,45 @@ class User extends BaseController
         return view('fe/pendaftaran', $data);
     }
 
+    public function simpan_pendaftaran()
+    {
+        $ticketModel = new TicketModel();
+        $file = $this->request->getFile('dokumen');
+        $fileName = null;
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $fileName = $file->getRandomName();
+            $file->move('uploads/documents', $fileName);
+        }
+
+        $tahun = date('Y');
+        $jumlahTiket = $ticketModel->countAll() + 1;
+        $nomorTiket = sprintf("KIR-%s-%03d", $tahun, $jumlahTiket);
+
+        $data = [
+            'plate_no'          => $this->request->getPost('plat_nomor'),
+            'owner_name'        => $this->request->getPost('nama'),
+            'jenis_kendaraan'   => $this->request->getPost('jenis_kendaraan'),
+            'jenis_layanan'     => 'Uji KIR',
+            'nomor_tiket'       => $nomorTiket,
+            'status'            => 'Menunggu',
+            'tanggal_pengajuan' => date('Y-m-d H:i:s'),
+            'tanggal_uji'       => $this->request->getPost('tanggal'),
+            'biaya'             => 0.00,
+            'catatan'           => '',
+        ];
+
+        if ($fileName) {
+            $data['document'] = $fileName;
+        }
+
+        $ticketModel->insert($data);
+
+        return redirect()->to('/pendaftaran')->with('success', '✅ Pendaftaran berhasil! Nomor Tiket Anda: ' . $nomorTiket);
+    }
+
+
+
     public function cek_status()
     {
         return view('fe/cek_status');
@@ -41,7 +80,7 @@ class User extends BaseController
         $keyword = $this->request->getPost('keyword');
         $data['ticket'] = $ticketModel
             ->where('nomor_tiket', $keyword)
-            ->orWhere('plat_nomor', $keyword)
+            ->orWhere('plate_no', $keyword)
             ->first();
         return view('fe/hasil_status', $data);
     }

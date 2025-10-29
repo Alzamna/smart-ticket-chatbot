@@ -13,7 +13,9 @@ class TicketModel extends Model
         'status',
         'tanggal_pengajuan',
         'catatan',
-        'id_vehicle'
+        'id_vehicle',
+        'plate_no',
+        'owner_name',
     ];
 
     protected $useTimestamps = false;
@@ -24,5 +26,13 @@ class TicketModel extends Model
         $count = $this->where("YEAR(tanggal_pengajuan)", $year)->countAllResults(false);
         $num = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
         return "KIR-{$year}-{$num}";
+    }
+
+    public function generateIdUserTicket()
+    {
+        $year = date('Y');
+        $count = $this->where("YEAR(tanggal_pengajuan)", $year)->countAllResults(false);
+        $num = str_pad($count + 1, 4, '0', STR_PAD_LEFT);
+        return "USR-{$year}-{$num}";
     }
 }

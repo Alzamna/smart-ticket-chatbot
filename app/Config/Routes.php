@@ -65,6 +65,8 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
 
     // Pengaduan
     $routes->get('complaints', 'Admin::complaints');
+    $routes->get('complaints/edit/(:num)', 'Admin::edit_complaint/$1');
+    $routes->post('complaints/edit/(:num)', 'Admin::edit_complaint/$1');
     $routes->post('complaints/update/(:num)', 'Admin::update_complaint/$1');
     $routes->get('complaints/delete/(:num)', 'Admin::delete_complaint/$1');
 
