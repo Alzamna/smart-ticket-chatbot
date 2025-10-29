@@ -9,8 +9,16 @@ use CodeIgniter\Router\RouteCollection;
 // Home
 $routes->get('/', 'User::index');
 
+// Informasi 
+$routes->get('/informasi', 'User::informasi');
+
 // Pendaftaran
-$routes->get('/tiketing', 'User::pendaftaran');
+$routes->get('/pendaftaran', 'User::pendaftaran');
+$routes->post('/pendaftaran/save', 'User::simpan_pendaftaran'); 
+
+// Status
+$routes->get('/cek-status', 'User::cek_status');
+$routes->post('/cek-status', 'User::hasil_status');
 
 // Chatbot
 $routes->get('/chatbot', 'Chatbot::index');
