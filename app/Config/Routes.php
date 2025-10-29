@@ -5,32 +5,29 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
-$routes->get('/tiketing', 'Tiketing::index');
-$routes->get('/tiketing/create', 'Tiketing::create');
-$routes->post('/tiketing/store', 'Tiketing::store');
-$routes->get('/tiketing/(:num)', 'Tiketing::show/$1');
-$routes->post('/tiketing/update_status/(:num)', 'Tiketing::updateStatus/$1');
 
-$routes->post('/documents/upload/(:num)', 'Documents::upload/$1');
+// Home
+$routes->get('/', 'User::index');
 
+// Pendaftaran
+$routes->get('/tiketing', 'User::pendaftaran');
+
+// Chatbot
 $routes->get('/chatbot', 'Chatbot::index');
 $routes->post('/chatbot/sendMessage', 'Chatbot::sendMessage');
 $routes->get('/chatbot/reset', 'Chatbot::reset');
 
+// Pengaduan
+$routes->get('/pengaduan', 'User::pengaduan');
+$routes->post('/pengaduan/save', 'User::simpan_pengaduan');
 
 
-$routes->get('/documents/upload/(:num)', 'Documents::upload/$1');
-$routes->post('/documents/upload/(:num)', 'Documents::upload/$1');
-
-// Admin 
 // Login & Logout
 $routes->get('/b0/login', 'Auth::index');  
 $routes->post('/b0/login', 'Auth::login');
 $routes->get('/b0/logout', 'Auth::logout');
 
-
-// Area admin (pakai filter auth kalau sudah aktif)
+// Admin 
 $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('dashboard', 'Admin::dashboard');
 
