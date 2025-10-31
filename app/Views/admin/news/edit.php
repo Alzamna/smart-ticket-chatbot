@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/admin') ?>
+<?= $this->extend('admin/layout/index') ?>
 <?= $this->section('content') ?>
 
 <!-- Header Section -->
@@ -23,7 +23,7 @@
 
 <!-- Form Section -->
 <div class="bg-white rounded-lg shadow-sm p-6 max-w-4xl">
-  <form action="<?= base_url('admin/update_berita/' . $berita['id']) ?>" method="post" enctype="multipart/form-data" class="space-y-6">
+  <form action="<?= base_url('admin/berita/update/' . $berita['id']) ?>" method="post" enctype="multipart/form-data" class="space-y-6">
     <?= csrf_field() ?>
 
     <!-- Judul Berita -->
@@ -47,6 +47,21 @@
       <?php endif; ?>
     </div>
 
+    <!-- Deskripsi -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat</label>
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+          </svg>
+        </div>
+        <input type="text" name="deskripsi" value="<?= esc($berita['deskripsi']) ?>"
+          class="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+          placeholder="Masukkan deskripsi singkat" readonly>
+      </div>
+    </div>
+
     <!-- Isi Berita -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -56,7 +71,7 @@
       <div class="border border-gray-300 rounded-lg overflow-hidden">
         <div id="editor" style="height: 300px;"><?= $berita['isi'] ?></div>
       </div>
-      <input type="hidden" name="isi" id="isi" required>
+      <input type="hidden" name="isi" id="isi">
       <?php if(isset($validation) && $validation->hasError('isi')): ?>
         <p class="text-red-600 text-sm mt-1"><?= $validation->getError('isi') ?></p>
       <?php endif; ?>

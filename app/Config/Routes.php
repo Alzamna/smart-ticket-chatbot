@@ -71,8 +71,8 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('berita', 'Admin::berita');
     $routes->get('berita/create', 'Admin::berita_create');
     $routes->post('berita/store', 'Admin::berita_store');
-    $routes->get('berita/edit/(:num)', 'Admin::berita_edit/$1');
-    $routes->post('berita/update/(:num)', 'Admin::berita_update/$1');
+    $routes->get('berita/edit/(:num)', 'Admin::edit_berita/$1');
+    $routes->post('berita/update/(:num)', 'Admin::update_berita/$1');
     $routes->get('berita/delete/(:num)', 'Admin::berita_delete/$1');
 
 

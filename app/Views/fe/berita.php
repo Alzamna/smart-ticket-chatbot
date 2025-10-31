@@ -71,7 +71,7 @@
 
             <!-- Excerpt -->
             <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-              <?= character_limiter(strip_tags($b['isi']), 120) ?>
+              <?= character_limiter(strip_tags($b['deskripsi']), 120) ?>
             </p>
 
             <!-- Read More -->

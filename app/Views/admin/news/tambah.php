@@ -1,4 +1,4 @@
-<?= $this->extend('layout/admin') ?>
+<?= $this->extend('admin/layout/index') ?>
 <?= $this->section('content') ?>
 
 <!-- Header Section -->
@@ -41,6 +41,21 @@
       <?php endif; ?>
     </div>
 
+    <!-- Deskripsi -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Singkat</label>
+        <div class="relative">
+            <div class="absolute top-3 left-3 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+            </div>
+            <textarea name="deskripsi" rows="3"
+            class="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+            placeholder="Tulis deskripsi singkat berita..."><?= old('deskripsi') ?></textarea>
+        </div>
+    </div>
+
     <!-- Isi Berita -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -50,7 +65,7 @@
       <div class="border border-gray-300 rounded-lg overflow-hidden">
         <div id="editor" style="height: 300px;"></div>
       </div>
-      <textarea name="isi" id="isi" class="hidden" required></textarea>
+      <textarea name="isi" id="isi" class="hidden"></textarea>
       <?php if(isset($validation) && $validation->hasError('isi')): ?>
         <p class="text-red-600 text-sm mt-1"><?= $validation->getError('isi') ?></p>
       <?php endif; ?>
@@ -111,6 +126,7 @@
 <!-- Quill.js -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
 <script>
   // Initialize Quill editor
   const quill = new Quill('#editor', {
@@ -132,32 +148,30 @@
   form.onsubmit = () => {
     const content = quill.root.innerHTML;
     document.querySelector('#isi').value = content;
-    
-    // Basic validation
-    if (content === '<p><br></p>' || content === '') {
-      alert('Isi berita tidak boleh kosong');
-      return false;
+
+    // Validasi sederhana
+    if (content === '<p><br></p>' || content.trim() === '') {
+      alert('Isi berita tidak boleh kosong!');
+      return false; // mencegah submit
     }
   };
 
-  // File upload preview (optional enhancement)
+  // File upload preview
   const fileInput = document.querySelector('input[type="file"]');
   fileInput.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
-      const fileName = document.createElement('p');
-      fileName.className = 'text-sm text-green-600 mt-2';
-      fileName.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-      </svg> File terpilih: ${file.name}`;
-      
-      // Remove existing file name if any
-      const existingFileName = fileInput.parentNode.querySelector('.text-green-600');
-      if (existingFileName) {
-        existingFileName.remove();
-      }
-      
-      fileInput.parentNode.appendChild(fileName);
+      const existing = fileInput.parentNode.querySelector('.text-green-600');
+      if (existing) existing.remove();
+
+      const info = document.createElement('p');
+      info.className = 'text-sm text-green-600 mt-2';
+      info.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        File terpilih: ${file.name}`;
+      fileInput.parentNode.appendChild(info);
     }
   });
 </script>

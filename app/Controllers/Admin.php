@@ -3,6 +3,7 @@
 use App\Models\AdminModel;
 use App\Models\TicketModel;
 use App\Models\ComplaintModel;
+use App\Models\NewsModel;
 use App\Models\UserModel;
 
 class Admin extends BaseController
@@ -21,7 +22,7 @@ class Admin extends BaseController
         $this->complaintModel = new ComplaintModel();
         $this->userModel = new UserModel();
         $this->adminModel = new AdminModel();
-        $this->NewsModel = new \App\Models\NewsModel();
+        $this->NewsModel = new NewsModel();
     }
 
     //Dashboard
@@ -238,19 +239,22 @@ class Admin extends BaseController
 
      public function berita()
     {
+        helper('text');
+
         $data['berita'] = $this->NewsModel->findAll();
         return view('admin/news/index', $data);
     }
 
     public function berita_create()
     {
-        return view('admin/news/create');
+        return view('admin/news/tambah');
     }
 
     public function berita_store()
     {
         $judul = $this->request->getPost('judul');
         $slug  = url_title($judul, '-', true);
+        $deskripsi = $this->request->getPost('deskripsi');
         $isi   = $this->request->getPost('isi');
 
         $gambar = $this->request->getFile('gambar');
@@ -262,11 +266,12 @@ class Admin extends BaseController
 
         $this->NewsModel->insert([
             'judul' => $judul,
-            'slug'  => $slug,
-            'isi'   => $isi,
-            'gambar'=> $namaGambar
+            'slug' => $slug,
+            'deskripsi' => $deskripsi,
+            'isi' => $isi,
+            'gambar' => $namaGambar,
         ]);
-
+        
         return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil ditambahkan!');
     }
 
@@ -278,7 +283,7 @@ class Admin extends BaseController
             return redirect()->to(base_url('admin/berita'))->with('error', 'Data berita tidak ditemukan');
         }
 
-        return view('admin/berita_edit', $data);
+        return view('admin/news/edit', $data);
     }
 
     public function update_berita($id)
