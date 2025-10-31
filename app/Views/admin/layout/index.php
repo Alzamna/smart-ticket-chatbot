@@ -71,13 +71,12 @@
   <aside class="w-64 bg-white text-slate-800 min-h-screen shadow-lg">
     <div class="p-4 text-center gradient-header text-white">
       <div class="flex items-center justify-center mb-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-        <h1 class="text-xl font-bold">Dishub KIR</h1>
+        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white mb-2">
+          <img src="<?= base_url('images/logo.png') ?>" alt="Logo Dinas Perhubungan" class="w-20 h-20 object-contain">
+        </div>
       </div>
+      <h1 class="text-xl font-bold">Dishub KIR</h1>
       <p class="text-sm text-purple-100"><?= session('username') ?></p>
-      <p class="text-xs mt-1 text-purple-200">Admin Panel</p>
     </div>
     <nav class="mt-4 space-y-1">
       <a href="/admin/dashboard" class="flex items-center px-4 py-3 hover-nav <?= url_is('admin/dashboard')?'active-nav':'' ?>">
