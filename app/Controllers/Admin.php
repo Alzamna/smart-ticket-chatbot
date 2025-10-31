@@ -239,12 +239,12 @@ class Admin extends BaseController
      public function berita()
     {
         $data['berita'] = $this->NewsModel->findAll();
-        return view('admin/berita/index', $data);
+        return view('admin/news/index', $data);
     }
 
     public function berita_create()
     {
-        return view('admin/berita/create');
+        return view('admin/news/create');
     }
 
     public function berita_store()
@@ -270,34 +270,47 @@ class Admin extends BaseController
         return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil ditambahkan!');
     }
 
-    public function berita_edit($id)
+    public function edit_berita($id)
     {
         $data['berita'] = $this->NewsModel->find($id);
-        return view('admin/berita/edit', $data);
+
+        if (!$data['berita']) {
+            return redirect()->to(base_url('admin/berita'))->with('error', 'Data berita tidak ditemukan');
+        }
+
+        return view('admin/berita_edit', $data);
     }
 
-    public function berita_update($id)
+    public function update_berita($id)
     {
+        $berita = $this->NewsModel->find($id);
+        if (!$berita) {
+            return redirect()->to(base_url('admin/berita'))->with('error', 'Data berita tidak ditemukan');
+        }
+
         $judul = $this->request->getPost('judul');
-        $slug  = url_title($judul, '-', true);
-        $isi   = $this->request->getPost('isi');
+        $isi = $this->request->getPost('isi');
+        $gambarLama = $berita['gambar'];
 
-        $gambar = $this->request->getFile('gambar');
-        $namaGambar = $this->request->getPost('gambar_lama');
+        $file = $this->request->getFile('gambar');
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $namaBaru = $file->getRandomName();
+            $file->move('uploads/berita', $namaBaru);
 
-        if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
-            $namaGambar = $gambar->getRandomName();
-            $gambar->move('uploads/berita', $namaGambar);
+            if ($gambarLama && file_exists('uploads/berita/' . $gambarLama)) {
+                unlink('uploads/berita/' . $gambarLama);
+            }
+        } else {
+            $namaBaru = $gambarLama;
         }
 
         $this->NewsModel->update($id, [
             'judul' => $judul,
-            'slug'  => $slug,
-            'isi'   => $isi,
-            'gambar'=> $namaGambar
+            'isi' => $isi,
+            'gambar' => $namaBaru,
         ]);
 
-        return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil diperbarui!');
+        return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil diperbarui');
     }
 
     public function berita_delete($id)
