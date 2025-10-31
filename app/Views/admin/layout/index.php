@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= esc($title ?? 'Admin Panel Dinas Perhubungan') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* Warna kustom untuk Dinas Perhubungan */
     :root {
       --primary-color: #3f1871; /* Ungu */
       --secondary-color: #fcdb00; /* Kuning */
       --accent-color: #e11d48; /* Merah untuk aksen */
+    }
+
+    .font-\[Poppins\] {
+      font-family: 'Poppins', sans-serif;
     }
     
     .gradient-header {
@@ -65,13 +70,13 @@
     }
   </style>
 </head>
-<body class="bg-gray-50 flex">
+<body class="bg-gray-50 flex font-[Poppins]">
 
   <!-- Sidebar -->
   <aside class="w-64 bg-white text-slate-800 min-h-screen shadow-lg">
     <div class="p-4 text-center gradient-header text-white">
       <div class="flex items-center justify-center mb-2">
-        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white mb-2">
+        <div class="w-25 h-25 bg-white rounded-full flex items-center justify-center mb-2 p-1">
           <img src="<?= base_url('images/logo.png') ?>" alt="Logo Dinas Perhubungan" class="w-20 h-20 object-contain">
         </div>
       </div>
@@ -119,9 +124,68 @@
   </aside>
 
   <!-- Main Content -->
-  <main class="flex-1 p-6">
-    <?= $this->renderSection('content') ?>
-  </main>
+  <div class="flex-1 flex flex-col">
+    <!-- Simple Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center space-x-4">
+          <h1 class="text-xl font-bold text-primary"><?= esc($title ?? 'Admin Panel') ?></h1>
+          <?php if(isset($subtitle)): ?>
+            <span class="text-gray-400">/</span>
+            <span class="text-gray-600"><?= esc($subtitle) ?></span>
+          <?php endif; ?>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+          <!-- Notifications -->
+          <button class="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          
+          <!-- User Profile -->
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-semibold">
+              <?= strtoupper(substr(session('username'), 0, 1)) ?>
+            </div>
+            <div class="hidden md:block">
+              <p class="text-sm font-medium text-gray-900"><?= session('username') ?></p>
+              <p class="text-xs text-gray-500">Administrator</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 font-[Poppins] overflow-auto">
+      <!-- Flash messages -->
+      <?php if(session()->getFlashdata('success')): ?>
+        <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded mb-4 shadow-sm">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="font-medium">Berhasil!</span>
+          </div>
+          <p class="mt-1"><?= session('success') ?></p>
+        </div>
+      <?php elseif(session()->getFlashdata('error')): ?>
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4 shadow-sm">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            <span class="font-medium">Terjadi Kesalahan!</span>
+          </div>
+          <p class="mt-1"><?= session('error') ?></p>
+        </div>
+      <?php endif; ?>
+
+      <?= $this->renderSection('content') ?>
+    </main>
+  </div>
 
 </body>
 </html>
