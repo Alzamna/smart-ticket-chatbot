@@ -25,6 +25,10 @@ $routes->get('/chatbot', 'Chatbot::index');
 $routes->post('/chatbot/sendMessage', 'Chatbot::sendMessage');
 $routes->get('/chatbot/reset', 'Chatbot::reset');
 
+// Berita
+$routes->get('/berita', 'User::berita');
+$routes->get('/berita/(:segment)', 'User::berita_detail/$1');
+
 // Pengaduan
 $routes->get('/pengaduan', 'User::pengaduan');
 $routes->post('/pengaduan/save', 'User::simpan_pengaduan');

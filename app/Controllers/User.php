@@ -4,6 +4,7 @@ use App\Models\TicketModel;
 use App\Models\ComplaintModel;
 use App\Models\ServiceModel;
 use App\Models\VehicleModel;
+use App\Models\NewsModel;
 
 class User extends BaseController
 {
@@ -67,8 +68,6 @@ class User extends BaseController
         return redirect()->to('/pendaftaran')->with('success', '✅ Pendaftaran berhasil! Nomor Tiket Anda: ' . $nomorTiket);
     }
 
-
-
     public function cek_status()
     {
         return view('fe/cek_status');
@@ -112,4 +111,31 @@ class User extends BaseController
 
         return redirect()->to('/pengaduan')->with('success', 'Keluhan berhasil dikirim!');
     }
+
+    public function berita()
+    {
+        $NewsModel = new \App\Models\NewsModel();
+        $data['berita'] = $NewsModel->orderBy('created_at', 'DESC')->findAll();
+
+        return view('fe/berita', $data);
+    }
+
+    public function berita_detail($slug)
+    {
+        $NewsModel = new \App\Models\NewsModel();
+        $data['berita'] = $NewsModel->where('slug', $slug)->first();
+
+        if (!$data['berita']) {
+            return redirect()->to(base_url('berita'))->with('error', 'Berita tidak ditemukan.');
+        }
+
+        $data['related'] = $NewsModel
+            ->where('id !=', $data['berita']['id'])
+            ->orderBy('created_at', 'DESC')
+            ->limit(3)
+            ->find();
+
+        return view('fe/berita_detail', $data);
+    }
+
 }
