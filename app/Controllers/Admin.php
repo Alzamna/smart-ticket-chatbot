@@ -12,6 +12,7 @@ class Admin extends BaseController
     protected $complaintModel;
     protected $userModel;
     protected $adminModel;
+    protected $NewsModel;
 
     public function __construct()
     {
@@ -20,6 +21,7 @@ class Admin extends BaseController
         $this->complaintModel = new ComplaintModel();
         $this->userModel = new UserModel();
         $this->adminModel = new AdminModel();
+        $this->NewsModel = new \App\Models\NewsModel();
     }
 
     //Dashboard
@@ -230,6 +232,78 @@ class Admin extends BaseController
         $vehicleModel = new \App\Models\VehicleModel();
         $vehicleModel->delete($id);
         return redirect()->to('/admin/vehicles')->with('success', 'Kendaraan berhasil dihapus!');
+    }
+
+    // News
+
+     public function berita()
+    {
+        $data['berita'] = $this->NewsModel->findAll();
+        return view('admin/berita/index', $data);
+    }
+
+    public function berita_create()
+    {
+        return view('admin/berita/create');
+    }
+
+    public function berita_store()
+    {
+        $judul = $this->request->getPost('judul');
+        $slug  = url_title($judul, '-', true);
+        $isi   = $this->request->getPost('isi');
+
+        $gambar = $this->request->getFile('gambar');
+        $namaGambar = null;
+        if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
+            $namaGambar = $gambar->getRandomName();
+            $gambar->move('uploads/berita', $namaGambar);
+        }
+
+        $this->NewsModel->insert([
+            'judul' => $judul,
+            'slug'  => $slug,
+            'isi'   => $isi,
+            'gambar'=> $namaGambar
+        ]);
+
+        return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil ditambahkan!');
+    }
+
+    public function berita_edit($id)
+    {
+        $data['berita'] = $this->NewsModel->find($id);
+        return view('admin/berita/edit', $data);
+    }
+
+    public function berita_update($id)
+    {
+        $judul = $this->request->getPost('judul');
+        $slug  = url_title($judul, '-', true);
+        $isi   = $this->request->getPost('isi');
+
+        $gambar = $this->request->getFile('gambar');
+        $namaGambar = $this->request->getPost('gambar_lama');
+
+        if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
+            $namaGambar = $gambar->getRandomName();
+            $gambar->move('uploads/berita', $namaGambar);
+        }
+
+        $this->NewsModel->update($id, [
+            'judul' => $judul,
+            'slug'  => $slug,
+            'isi'   => $isi,
+            'gambar'=> $namaGambar
+        ]);
+
+        return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil diperbarui!');
+    }
+
+    public function berita_delete($id)
+    {
+        $this->NewsModel->delete($id);
+        return redirect()->to(base_url('admin/berita'))->with('success', 'Berita berhasil dihapus!');
     }
 
     // Complaint

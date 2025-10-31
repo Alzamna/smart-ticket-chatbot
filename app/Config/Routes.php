@@ -63,6 +63,15 @@ $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->post('vehicles/update/(:num)', 'Admin::update_vehicle/$1');
     $routes->get('vehicles/delete/(:num)', 'Admin::delete_vehicle/$1');
 
+    // Berita
+    $routes->get('berita', 'Admin::berita');
+    $routes->get('berita/create', 'Admin::berita_create');
+    $routes->post('berita/store', 'Admin::berita_store');
+    $routes->get('berita/edit/(:num)', 'Admin::berita_edit/$1');
+    $routes->post('berita/update/(:num)', 'Admin::berita_update/$1');
+    $routes->get('berita/delete/(:num)', 'Admin::berita_delete/$1');
+
+
     // Pengaduan
     $routes->get('complaints', 'Admin::complaints');
     $routes->get('complaints/edit/(:num)', 'Admin::edit_complaint/$1');
